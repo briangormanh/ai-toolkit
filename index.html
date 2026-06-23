@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AI Toolkit - Sixth City Marketing</title>
+<link rel="icon" href="assets/scm-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#23272F; --ink-2:#3A3F4A; --slate:#5C636E; --slate-soft:#8A909B;
+    --coral:#EF4E4E; --coral-deep:#D43C3C;
+    --paper:#F2F3F5; --panel:#E9EBEF; --card:#FFFFFF; --line:#DCDFE4;
+    --r-everyone:#5C636E; --r-am:#EF4E4E; --r-copy:#C2603A; --r-seo:#2F7D7D; --r-ppc:#3D6CA8;
+    --shadow:0 1px 2px rgba(35,39,47,.06), 0 8px 24px rgba(35,39,47,.06);
+    --shadow-hov:0 2px 4px rgba(35,39,47,.08), 0 16px 40px rgba(35,39,47,.12);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:500;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--slate);
+  }
+  h2.section-title{
+    font-family:"Saira Condensed",sans-serif; font-weight:700; text-transform:uppercase;
+    font-size:clamp(30px,4.4vw,46px); line-height:.98; letter-spacing:.01em; margin:0;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{background:var(--ink); color:#fff; position:relative; overflow:hidden}
+  .hero-inner{position:relative; padding:30px 0 56px}
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:20px; padding-bottom:48px}
+  .placard{background:#fff; border-radius:6px; padding:12px 16px; box-shadow:var(--shadow); display:block}
+  .placard img{display:block; height:46px; width:auto}
+  .topbar .meta{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--slate-soft); text-align:right; line-height:1.7}
+  .hero h1{
+    font-family:"Saira Condensed",sans-serif; font-weight:800; text-transform:uppercase;
+    font-size:clamp(48px,9vw,92px); line-height:.9; letter-spacing:.005em; margin:0;
+  }
+  .hero h1 .accent{color:var(--coral)}
+  .hero .lede{max-width:680px; margin:22px 0 0; font-size:clamp(17px,2.2vw,20px); color:#D7DAE0; line-height:1.5}
+  .hero .lede strong{color:#fff; font-weight:600}
+  .rule{height:5px; width:96px; background:var(--coral); margin:30px 0 0; border-radius:2px}
+
+  /* ---------- CONTROL BAR ---------- */
+  .controls{position:sticky; top:0; z-index:50; background:rgba(242,243,245,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+  .controls-inner{display:flex; flex-wrap:wrap; gap:16px 22px; align-items:center; padding:14px 0}
+  .viewtoggle{display:inline-flex; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:3px}
+  .viewtoggle button{
+    font-family:"Saira Condensed",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.05em;
+    font-size:15px; border:0; background:transparent; color:var(--slate); padding:7px 16px; border-radius:6px; cursor:pointer;
+  }
+  .viewtoggle button.on{background:var(--ink); color:#fff}
+  .search{flex:1; min-width:200px; display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 13px}
+  .search input{border:0; outline:0; background:transparent; font-family:inherit; font-size:15px; width:100%; color:var(--ink)}
+  .search svg{flex:none; color:var(--slate-soft)}
+  .roles{display:flex; flex-wrap:wrap; gap:8px; width:100%}
+  .chip{
+    font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:500; letter-spacing:.04em;
+    border:1px solid var(--line); background:var(--card); color:var(--slate);
+    padding:6px 12px 6px 10px; border-radius:20px; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+    transition:border-color .15s, color .15s, background .15s;
+  }
+  .chip .dot{width:9px; height:9px; border-radius:50%; background:var(--c,#999)}
+  .chip.on{background:var(--ink); color:#fff; border-color:var(--ink)}
+  .chip:hover{border-color:var(--slate)}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:56px 0}
+  .section-head{margin-bottom:28px}
+  .section-head .eyebrow{display:block; margin-bottom:8px}
+  .section-head p.sub{margin:10px 0 0; color:var(--slate); max-width:640px}
+
+  .group-title{
+    font-family:"Saira Condensed",sans-serif; font-weight:700; text-transform:uppercase; font-size:22px;
+    letter-spacing:.02em; margin:40px 0 16px; display:flex; align-items:center; gap:12px; color:var(--ink);
+  }
+  .group-title::after{content:""; flex:1; height:1px; background:var(--line)}
+  .group-title:first-of-type{margin-top:0}
+
+  /* ---------- TOOL TAG CARDS ---------- */
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:16px}
+  .tag{
+    position:relative; background:var(--card); border:1px solid var(--line); border-radius:9px;
+    padding:16px 18px 14px; box-shadow:var(--shadow); transition:box-shadow .18s, transform .18s, border-color .18s;
+    border-top:4px solid var(--accent,#5C636E); display:flex; flex-direction:column;
+  }
+  .tag:hover{box-shadow:var(--shadow-hov); transform:translateY(-2px); border-color:#cfd3d9}
+  .tag .sku{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--slate-soft); margin-bottom:6px}
+  .tag h3{font-family:"Saira Condensed",sans-serif; font-weight:700; text-transform:uppercase; font-size:21px; line-height:1; letter-spacing:.01em; margin:0 0 7px; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
+  .free{font-family:"IBM Plex Mono",monospace; font-size:9.5px; font-weight:600; letter-spacing:.08em; color:#1f7a4d; background:#e4f4ea; border:1px solid #bfe6cd; padding:1px 6px; border-radius:4px}
+  .tag .best{font-weight:600; font-size:13.5px; line-height:1.4; margin:0 0 10px; color:var(--ink)}
+  .cases{margin:0 0 12px; padding:0; list-style:none}
+  .cases li{font-size:12.5px; color:var(--ink-2); padding:4px 0 4px 15px; position:relative; border-top:1px dashed var(--line); line-height:1.35}
+  .cases li:first-child{border-top:0}
+  .cases li::before{content:"›"; position:absolute; left:2px; color:var(--coral); font-weight:700}
+  .cardfoot{margin-top:auto; display:flex; flex-direction:column; gap:9px; padding-top:10px}
+  .rolerow{display:flex; flex-wrap:wrap; gap:5px}
+  .rtag{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.04em; padding:2px 7px; border-radius:4px; color:#fff; background:var(--rc,#5C636E)}
+  .open{display:inline-flex; align-items:center; gap:5px; font-family:"Saira Condensed",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.05em; font-size:13px; color:var(--coral-deep); text-decoration:none; align-self:flex-start}
+  .open:hover{gap:9px}
+  .open.muted{color:var(--slate-soft); cursor:default}
+
+  .empty{text-align:center; color:var(--slate); padding:50px 0; font-size:16px}
+  .count{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--slate); letter-spacing:.05em; margin-bottom:18px}
+
+  /* ---------- SEO SKILLS ---------- */
+  .skills{background:var(--ink); color:#fff}
+  .skills .eyebrow{color:var(--slate-soft)}
+  .skills h2.section-title{color:#fff}
+  .skills .sub{color:#C2C6CE}
+  .soonbar{display:inline-flex; align-items:center; gap:8px; font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); background:var(--coral); padding:5px 12px; border-radius:5px; margin-bottom:18px; font-weight:600}
+  .skillgroup{margin-top:34px}
+  .skillgroup h4{font-family:"Saira Condensed",sans-serif; font-weight:700; text-transform:uppercase; font-size:20px; letter-spacing:.02em; margin:0 0 14px; color:#fff; display:flex; align-items:center; gap:12px}
+  .skillgroup h4 .n{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--coral); border:1px solid rgba(239,78,78,.5); border-radius:5px; padding:2px 8px; font-weight:500; letter-spacing:.08em}
+  .skillgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px}
+  .skill{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-left:3px solid var(--coral); border-radius:8px; padding:15px 17px}
+  .skill code{font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:14px; color:#fff; background:rgba(255,255,255,.07); padding:2px 7px; border-radius:5px; display:inline-block; margin-bottom:7px}
+  .skill p{margin:0; font-size:13.5px; color:#C7CBD3; line-height:1.5}
+  .skillnote{margin-top:30px; font-size:13.5px; color:#9AA0AB; border-top:1px solid rgba(255,255,255,.12); padding-top:18px; font-family:"IBM Plex Mono",monospace; letter-spacing:.02em}
+  .skillnote b{color:#fff}
+
+  /* ---------- PROJECTS ---------- */
+  .projgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px}
+  .proj{background:var(--card); border:1px solid var(--line); border-radius:9px; padding:18px 19px; box-shadow:var(--shadow); transition:box-shadow .18s, transform .18s; display:flex; flex-direction:column}
+  .proj:hover{box-shadow:var(--shadow-hov); transform:translateY(-2px)}
+  .proj .sku{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--slate-soft); margin-bottom:7px}
+  .proj h3{font-family:"Saira Condensed",sans-serif; font-weight:700; text-transform:uppercase; font-size:22px; line-height:1; margin:0 0 8px}
+  .proj p{margin:0 0 12px; font-size:14px; color:var(--ink-2); flex:1}
+  .proj .rolerow{margin:0 0 12px}
+  .proj a.open{font-family:"Saira Condensed",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.05em; font-size:14px; color:var(--coral-deep); text-decoration:none; display:inline-flex; gap:6px}
+  .proj a.open:hover{gap:10px}
+
+  /* ---------- UPDATE / FOOTER ---------- */
+  .howto{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:6px 26px; box-shadow:var(--shadow)}
+  .howto summary{cursor:pointer; font-family:"Saira Condensed",sans-serif; font-weight:700; text-transform:uppercase; font-size:22px; letter-spacing:.01em; padding:20px 0; list-style:none; display:flex; align-items:center; gap:12px}
+  .howto summary::-webkit-details-marker{display:none}
+  .howto summary::before{content:"+"; font-family:"IBM Plex Mono",monospace; color:var(--coral); font-size:24px; font-weight:600}
+  .howto[open] summary::before{content:"–"}
+  .howto .body{padding:0 0 24px; max-width:760px}
+  .howto ol{padding-left:20px; margin:6px 0 18px}
+  .howto li{margin:9px 0; color:var(--ink-2); font-size:14.5px}
+  .howto code{font-family:"IBM Plex Mono",monospace; font-size:13px; background:var(--panel); padding:2px 6px; border-radius:4px}
+  .schema{font-family:"IBM Plex Mono",monospace; font-size:12.5px; background:var(--ink); color:#D7DAE0; padding:14px 16px; border-radius:8px; overflow-x:auto; white-space:pre; line-height:1.7}
+
+  footer{background:var(--ink); color:#9AA0AB; text-align:center; padding:40px 0}
+  footer img{height:30px; opacity:.85; margin-bottom:14px; background:#fff; padding:7px 11px; border-radius:5px}
+  footer p{margin:6px 0; font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase}
+
+  @media (max-width:640px){
+    .wrap{padding:0 18px}
+    .topbar{padding-bottom:36px}
+    .hero h1{font-size:clamp(46px,16vw,80px)}
+    section{padding:42px 0}
+  }
+  @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important; transition:none!important}}
+  :focus-visible{outline:3px solid var(--coral); outline-offset:2px; border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="topbar">
+      <a class="placard" href="https://www.sixthcitymarketing.com/" aria-label="Sixth City Marketing">
+        <img src="assets/scm-logo.png" alt="Sixth City Marketing">
+      </a>
+      <div class="meta">Internal Resource<br>AI Tool Library · v1</div>
+    </div>
+    <p class="eyebrow" style="color:var(--slate-soft)">The right tool, for the right job</p>
+    <h1>AI <span class="accent">Toolkit</span></h1>
+    <p class="lede">Every AI tool we use, what each one is genuinely good at, and <strong>when to reach for it</strong>. Start with what you're trying to do, or browse by tool. Built for the whole team - no AI experience required.</p>
+    <div class="rule"></div>
+  </div>
+</header>
+
+<!-- ===== CONTROLS ===== -->
+<div class="controls">
+  <div class="wrap controls-inner">
+    <div class="viewtoggle" role="tablist" aria-label="View mode">
+      <button id="viewTask" class="on" role="tab" aria-selected="true">By Task &amp; Role</button>
+      <button id="viewTool" role="tab" aria-selected="false">By Tool</button>
+    </div>
+    <label class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" type="search" placeholder="Search tools, Claude Projects, or skills - e.g. &quot;summarize a call&quot;, &quot;formatter&quot;" aria-label="Search tools, projects, and skills">
+    </label>
+    <div class="roles" id="roleChips"></div>
+  </div>
+</div>
+
+<!-- ===== LIBRARY ===== -->
+<section id="library">
+  <div class="wrap">
+    <div class="count" id="count"></div>
+    <div id="results"></div>
+  </div>
+</section>
+
+<!-- ===== CLAUDE PROJECTS ===== -->
+<section id="projects" style="background:var(--panel)">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Pre-built assistants</span>
+      <h2 class="section-title">Claude Projects</h2>
+      <p class="sub">Reusable assistants with our instructions and reference files already loaded - so you skip the setup and just paste your work in. Open one, then start a new chat inside it.</p>
+    </div>
+    <div class="projgrid" id="projGrid"></div>
+  </div>
+</section>
+
+<!-- ===== SEO SKILLS ===== -->
+<section id="skills" class="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="soonbar">● SEO Team · Rolling out gradually</span>
+      <h2 class="section-title">Claude Code Skills</h2>
+      <p class="sub">Custom workflows built into Claude Code that run a whole deliverable end to end. These are coming to the SEO team in stages - here's the full map of what exists and what's on the way. The goal: get the whole team running these as fluently as a director does.</p>
+    </div>
+    <div id="skillGroups"></div>
+    <p class="skillnote"><b>Connected to your data.</b> These skills can pull live numbers straight from <b>Ahrefs</b> and <b>SE Ranking</b> inside Claude Code - no manual exports.</p>
+  </div>
+</section>
+
+<!-- ===== HOW TO UPDATE ===== -->
+<section id="update">
+  <div class="wrap">
+    <details class="howto">
+      <summary>How to add or edit a tool</summary>
+      <div class="body">
+        <p>This page reads from a shared Google Sheet. Anyone can add a tool or fix a use case - no code, no developer needed.</p>
+        <ol>
+          <li>Open the shared <strong>AI Toolkit</strong> Google Sheet (link from your team lead).</li>
+          <li>Add a row, or edit an existing one. Each row is one tool.</li>
+          <li>Save. The page picks up changes on the next refresh.</li>
+        </ol>
+        <p style="font-weight:600;margin-bottom:8px">Columns (use these exact headers):</p>
+        <div class="schema">tool        Name shown on the card
+category    Grouping label (e.g. "Assistants", "Research", "Decks")
+roles       Comma-separated: Everyone, Account Managers, Copywriters, SEO, PPC
+tasks       Comma-separated task names (these become the headings in "By Task")
+best        One line: what it's genuinely good at
+cases       A few use cases, separated by  |  (pipe)
+free        yes  (leave blank if not free)
+link        URL to open the tool  (optional)</div>
+        <p style="margin-top:16px;font-size:13.5px;color:var(--slate)">PPC team: this is where you add your tools - just fill in rows with the <code>PPC</code> role.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/scm-logo.png" alt="Sixth City Marketing">
+    <p>Sixth City Marketing · Internal AI Toolkit</p>
+    <p style="color:#6B7280">Use AI to do better work, faster - not to skip the thinking.</p>
+  </div>
+</footer>
+
+<script>
+/* ============ CONFIG ============ */
+// Paste your published Google Sheet CSV URL here (File ▸ Share ▸ Publish to web ▸ CSV).
+// While empty, the page uses the built-in data below.
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkm1SEdY9iRjin13xSjZSwQTNJ9z4jnICUTiWQTwMOF7RwEBu-fdibDwWMMGf9mrE0n5uL52LRPsR9/pub?output=csv";
+
+/* ============ ROLE SYSTEM ============ */
+const ROLES = [
+  {key:"Everyone",         color:"var(--r-everyone)"},
+  {key:"Account Managers", color:"var(--r-am)"},
+  {key:"Copywriters",      color:"var(--r-copy)"},
+  {key:"SEO",              color:"var(--r-seo)"},
+  {key:"PPC",              color:"var(--r-ppc)"},
+];
+const roleColor = r => (ROLES.find(x=>x.key===r)||{}).color || "#5C636E";
+
+/* ============ FALLBACK DATA ============ */
+const FALLBACK = [
+  {tool:"ChatGPT", category:"Assistants", roles:["Everyone"], tasks:["Simplify or rewrite text","Summarize docs & calls","Math & data","Write & edit content"],
+   best:"All-purpose helper for everyday writing, summarizing and quick thinking.",
+   use:"Your default scratchpad for drafting, rewording, and quick questions.",
+   avoid:"Don't trust its raw mental math - tell it to use Python/code for any calculation.",
+   cases:["Simplify a paragraph you paste in","Turn rough notes into a clean email","Run a calculation accurately (ask it to use Python)"], free:"", link:"https://chatgpt.com"},
+
+  {tool:"Claude", category:"Assistants", roles:["Everyone"], tasks:["Write & edit content","Simplify or rewrite text","Summarize docs & calls","Math & data"],
+   best:"Strong, natural writing and careful work over long documents.",
+   use:"When writing quality and tone matter, or you're working through a long doc.",
+   avoid:"Same math rule - ask it to use code for numbers.",
+   cases:["Edit copy for clarity and tone","Work through a long transcript or report","Use a saved Project (see Claude Projects below)"], free:"", link:"https://claude.ai"},
+
+  {tool:"Gemini + Chrome", category:"Assistants", roles:["Everyone","Account Managers","SEO"], tasks:["Audit a live page","Audience & competitor research","Simplify or rewrite text"],
+   best:"Lives in Chrome and can SEE the page you're on - and multiple tabs at once.",
+   use:"Anytime you want AI to look at real web pages with you.",
+   avoid:"",
+   cases:["Analyze the page you're viewing","Open your client page + 2-3 top-ranking pages in tabs, then ask for ways to improve the client page","Quick read on a competitor's site"], free:"yes", link:"https://gemini.google.com"},
+
+  {tool:"Grok", category:"Assistants", roles:["SEO","Account Managers"], tasks:["Audience & competitor research"],
+   best:"Tied into X / Twitter - good for social listening and spotting trends.",
+   use:"Audience research and trend-spotting where Twitter chatter matters.",
+   avoid:"Niche use - not your general assistant.",
+   cases:["Social listening on a brand or topic","Find emerging trends for audience research"], free:"yes", link:"https://grok.com"},
+
+  {tool:"Perplexity", category:"Research", roles:["Everyone"], tasks:["Research & fact-check","Audience & competitor research"],
+   best:"A better search engine - answers with sources you can click.",
+   use:"When you need a cited, trustworthy answer faster than digging through Google.",
+   avoid:"",
+   cases:["Cited answer to a research question","Point it at forums (Reddit, etc.) for audience research","Quick competitive fact-finding"], free:"yes", link:"https://www.perplexity.ai"},
+
+  {tool:"NotebookLM", category:"Research", roles:["Account Managers","SEO"], tasks:["Client calls & retention","Research & fact-check"],
+   best:"A knowledge base built only from sources YOU give it.",
+   use:"As a per-client repository - load kickoff notes, key page content, and client resources, then check your work against it.",
+   avoid:"Keep sources evergreen and trusted - it's not a scratchpad.",
+   cases:["Build a client knowledge base","Confirm you're on track with a client's stated priorities","Ask questions answered only from client materials"], free:"yes", link:"https://notebooklm.google.com"},
+
+  {tool:"Consensus", category:"Research", roles:["Everyone"], tasks:["Research & fact-check"],
+   best:"Answers backed by peer-reviewed studies, with the papers cited.",
+   use:"When a claim needs to be credible and science-backed, not just plausible.",
+   avoid:"Built for research-style questions - not general chit-chat.",
+   cases:["Find the scientific consensus on a question","Back up a claim with real studies"], free:"", link:"https://consensus.app"},
+
+  {tool:"ImageFX", category:"Media", roles:["Everyone"], tasks:["Create images"],
+   best:"Free, high-quality image generation from Google.",
+   use:"When you need a custom image and don't want to pay for one.",
+   avoid:"",
+   cases:["Generate a graphic for a post or deck","Create a custom illustration on a theme"], free:"yes", link:"https://aitestkitchen.withgoogle.com/tools/image-fx"},
+
+  {tool:"Descript", category:"Media", roles:["Everyone"], tasks:["Create video & audio"],
+   best:"Edit video and audio as easily as editing text. Great for audiograms.",
+   use:"Producing or trimming video/audio clips and social audiograms.",
+   avoid:"",
+   cases:["Make an audiogram from a clip","Trim and clean up a video","Edit audio by editing the transcript"], free:"", link:"https://www.descript.com"},
+
+  {tool:"Gamma", category:"Decks", roles:["Everyone"], tasks:["Reporting & decks"],
+   best:"Spin up a presentation fast, then hand-edit it easily.",
+   use:"When you need a decent deck in a pinch.",
+   avoid:"Has a fairly templated look - use GenSpark when you need a custom feel.",
+   cases:["Draft a client deck quickly","Turn an outline into slides"], free:"", link:"https://gamma.app"},
+
+  {tool:"GenSpark", category:"Decks", roles:["Everyone","SEO"], tasks:["Reporting & decks"],
+   best:"More customizable, polished presentations.",
+   use:"When the deck needs to look bespoke, not templated.",
+   avoid:"",
+   cases:["Build a higher-stakes client presentation","Customize layout beyond a template"], free:"", link:"https://www.genspark.ai"},
+
+  {tool:"Otter AI", category:"Meetings", roles:["Account Managers","SEO"], tasks:["Client calls & retention","Summarize docs & calls"],
+   best:"Phenomenal meeting transcriber.",
+   use:"To revisit client calls - action items, priorities, and retention risks - and to catch up if you miss one.",
+   avoid:"",
+   cases:["Recap a client call accurately","Pull action items from a meeting","Catch up on a call you missed"], free:"", link:"https://otter.ai"},
+
+  {tool:"tactiq.io", category:"Meetings", roles:["Everyone"], tasks:["Summarize docs & calls"],
+   best:"One-click transcript capture - including YouTube videos.",
+   use:"To grab a clean transcript fast, then summarize it in any assistant.",
+   avoid:"",
+   cases:["Copy a YouTube transcript in one click","Capture a meeting transcript to summarize"], free:"yes", link:"https://tactiq.io"},
+
+  {tool:"YouTube Ask", category:"Research", roles:["Everyone"], tasks:["Summarize docs & calls","Research & fact-check"],
+   best:"Gemini-powered Q&A built into YouTube - summarize long videos.",
+   use:"For quick learning without watching a whole long video.",
+   avoid:"",
+   cases:["Summarize a long video","Ask a question about what a video covers"], free:"yes", link:""},
+];
+
+/* ============ CLAUDE PROJECTS ============ */
+const PROJECTS = [
+  {name:"AI Content Editor", roles:["Copywriters","SEO"], desc:"Edit and tighten content for clarity, flow, and quality.", link:"https://claude.ai/project/019aa2b8-46c0-73e7-a33d-03429ca406ea"},
+  {name:"AI Content Formatter", roles:["Copywriters","SEO"], desc:"Reformat a draft into a clean, scannable, on-brand layout.", link:"https://claude.ai/project/019ab723-1b0b-770e-b589-1646cc00d210"},
+  {name:"PR Responder", roles:["Account Managers"], desc:"Draft careful, on-brand replies to PR-sensitive situations and reviews.", link:"https://claude.ai/project/019d3f74-667d-7029-bd23-343acb095ddf"},
+  {name:"Beastly", roles:["Copywriters","SEO","Account Managers"], desc:"Sharp, honest feedback on a piece of content - scores plus concrete fixes.", link:"https://claude.ai/project/019c528c-902b-72f1-a605-8e3dd15887b6"},
+  {name:"Surfer SEO Formatter (Hylan)", roles:["SEO"], desc:"Client-specific (Hylan Dental) - formats content to Surfer SEO guidance.", link:"https://claude.ai/project/019d4036-ea3f-769e-9e01-b5d96b5bea67"},
+];
+
+/* ============ SEO SKILLS ============ */
+const SKILLS = [
+  {group:"Client Onboarding", items:[
+    {cmd:"/market-eval", desc:"Size up a local market before pitching or kicking off - how winnable it is, who's ahead, and how long it'll take."},
+    {cmd:"/site-audit", desc:"Full SEO audit (content, conversion, backlinks, competitors) with a prioritized action plan."},
+    {cmd:"/module-system", desc:"Set the 30,000-foot strategy across Foundations, Velocity, Growth, and Expansion."},
+    {cmd:"/strategy-doc", desc:"Build the quarterly strategy doc with hour allocations (+ /strategy-review to QA it)."},
+  ]},
+  {group:"Content Pipeline", items:[
+    {cmd:"/new-blog-post-prep", desc:"Research → study guide → writing brief for a brand-new blog post."},
+    {cmd:"/new-money-page-prep", desc:"Same full prep for a new service, product, or geo page."},
+    {cmd:"/content-planner", desc:"Build a 12-month content plan using the Authority Graph method."},
+    {cmd:"/page-opt-doc", desc:"Produce a formatted on-page optimization deliverable (+ /page-opt-review to QA)."},
+    {cmd:"/content-formatter", desc:"Turn a finished draft into a scannable, branded Word doc."},
+    {cmd:"/beast-analysis", desc:"Score any content across 7 categories with concrete rewrites."},
+    {cmd:"/need-to-know", desc:"Distill pasted articles or transcripts into a plain-language briefing."},
+  ]},
+  {group:"AI Search & Entities", items:[
+    {cmd:"/prompt-intersections", desc:"Find the real multi-concept questions your audience asks an AI."},
+    {cmd:"/entitymap-sync", desc:"Decide whether a site's entity map needs updating after a content change."},
+    {cmd:"/link-bait", desc:"Build data-driven linkable assets for digital PR."},
+  ]},
+  {group:"Reporting & Team Ops", items:[
+    {cmd:"/eom-report", desc:"Turn monthly meeting notes into a styled end-of-month report email."},
+    {cmd:"/goals", desc:"Analyze monthly goal pacing from a pasted spreadsheet."},
+    {cmd:"/weekly-report", desc:"Assemble the curated weekly cross-team update."},
+    {cmd:"/steves-plate", desc:"Rebalance a team member's weekly workload."},
+  ]},
+];
+
+/* ============ STATE ============ */
+let DATA = FALLBACK.slice();
+let view = "task";          // "task" | "tool"
+let activeRoles = new Set();
+let query = "";
+
+/* ============ CSV PARSER ============ */
+function parseCSV(text){
+  const rows=[]; let row=[], val="", q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i], n=text[i+1];
+    if(q){
+      if(c==='"'&&n==='"'){val+='"';i++;}
+      else if(c==='"'){q=false;}
+      else val+=c;
+    }else{
+      if(c==='"')q=true;
+      else if(c===','){row.push(val);val="";}
+      else if(c==='\n'){row.push(val);rows.push(row);row=[];val="";}
+      else if(c==='\r'){}
+      else val+=c;
+    }
+  }
+  if(val.length||row.length){row.push(val);rows.push(row);}
+  return rows;
+}
+function rowsToData(rows){
+  if(!rows.length) return [];
+  const head=rows[0].map(h=>h.trim().toLowerCase());
+  const idx=k=>head.indexOf(k);
+  const split=(s,sep)=> (s||"").split(sep).map(x=>x.trim()).filter(Boolean);
+  return rows.slice(1).filter(r=>r.some(c=>c&&c.trim())).map(r=>({
+    tool:r[idx("tool")]||"",
+    category:r[idx("category")]||"Other",
+    roles:split(r[idx("roles")],","),
+    tasks:split(r[idx("tasks")],","),
+    best:r[idx("best")]||"",
+    use:r[idx("use")]||"",
+    avoid:r[idx("avoid")]||"",
+    cases:split(r[idx("cases")],"|"),
+    free:(r[idx("free")]||"").trim().toLowerCase().startsWith("y")?"yes":"",
+    link:r[idx("link")]||"",
+  })).filter(d=>d.tool);
+}
+
+/* ============ RENDER HELPERS ============ */
+const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function card(d){
+  const roleTags = d.roles.map(r=>`<span class="rtag" style="--rc:${roleColor(r)}">${esc(r)}</span>`).join("");
+  const cases = d.cases.length?`<ul class="cases">${d.cases.map(c=>`<li>${esc(c)}</li>`).join("")}</ul>`:"";
+  const free = d.free?`<span class="free">FREE</span>`:"";
+  const accent = roleColor(d.roles[0]||"Everyone");
+  const open = d.link
+    ? `<a class="open" href="${esc(d.link)}" target="_blank" rel="noopener">Open →</a>`
+    : `<span class="open muted">In-app feature</span>`;
+  return `<article class="tag" style="--accent:${accent}">
+    <span class="sku">${esc(d.category)}</span>
+    <h3>${esc(d.tool)}${free}</h3>
+    <p class="best">${esc(d.best)}</p>
+    ${cases}
+    <div class="cardfoot"><div class="rolerow">${roleTags}</div>${open}</div>
+  </article>`;
+}
+
+// A selected pill matches only items literally tagged with that role.
+// No auto-include of "Everyone" - so PPC (with nothing tagged) shows empty.
+function matchRole(roles){
+  if(!activeRoles.size) return true;
+  return roles.some(r=>activeRoles.has(r));
+}
+function matchQuery(hay){
+  if(!query) return true;
+  return hay.toLowerCase().includes(query);
+}
+function matches(d){
+  return matchRole(d.roles) &&
+    matchQuery(d.tool+" "+d.category+" "+d.best+" "+d.use+" "+d.tasks.join(" ")+" "+d.cases.join(" ")+" "+d.roles.join(" "));
+}
+
+function renderAll(){ render(); renderProjects(); renderSkills(); }
+
+function render(){
+  const res=document.getElementById("results");
+  const list=DATA.filter(matches);
+  document.getElementById("count").textContent =
+    `${list.length} ${list.length===1?"tool":"tools"}` + (activeRoles.size?` · ${[...activeRoles].join(", ")}`:"") + (query?` · "${query}"`:"");
+  if(!list.length){
+    let msg;
+    if(query) msg = `No tools match "${query}". Check Claude Projects and Skills below, or try another word.`;
+    else if(activeRoles.size) msg = `No tools tagged for ${[...activeRoles].join(", ")} yet. Add them in the Sheet, or clear the filter.`;
+    else msg = "Nothing to show.";
+    res.innerHTML=`<p class="empty">${esc(msg)}</p>`;
+    return;
+  }
+
+  if(view==="tool"){
+    const sorted=list.slice().sort((a,b)=>a.tool.localeCompare(b.tool));
+    res.innerHTML=`<div class="grid">${sorted.map(card).join("")}</div>`;
+    return;
+  }
+  // group by task
+  const taskMap=new Map();
+  list.forEach(d=>{
+    (d.tasks.length?d.tasks:["Other"]).forEach(t=>{
+      if(!taskMap.has(t))taskMap.set(t,[]);
+      taskMap.get(t).push(d);
+    });
+  });
+  const order=["Write & edit content","Simplify or rewrite text","Summarize docs & calls","Research & fact-check","Audience & competitor research","Client calls & retention","Reporting & decks","Audit a live page","Create images","Create video & audio","Math & data"];
+  const keys=[...taskMap.keys()].sort((a,b)=>{
+    const ia=order.indexOf(a),ib=order.indexOf(b);
+    return (ia<0?99:ia)-(ib<0?99:ib) || a.localeCompare(b);
+  });
+  res.innerHTML=keys.map(t=>`
+    <div class="group-title">${esc(t)}</div>
+    <div class="grid">${taskMap.get(t).map(card).join("")}</div>
+  `).join("");
+}
+
+/* ============ BUILD STATIC SECTIONS ============ */
+function buildChips(){
+  const wrap=document.getElementById("roleChips");
+  wrap.innerHTML=ROLES.map(r=>`<button class="chip" data-role="${r.key}" style="--c:${r.color}"><span class="dot"></span>${r.key}</button>`).join("");
+  wrap.querySelectorAll(".chip").forEach(ch=>{
+    ch.addEventListener("click",()=>{
+      const role=ch.dataset.role;
+      if(activeRoles.has(role)){activeRoles.delete(role);ch.classList.remove("on");}
+      else{activeRoles.add(role);ch.classList.add("on");}
+      renderAll();
+    });
+  });
+}
+function renderProjects(){
+  const sec=document.getElementById("projects");
+  const list=PROJECTS.filter(p=> matchRole(p.roles) && matchQuery(p.name+" "+p.desc+" "+p.roles.join(" ")));
+  if(!list.length){ sec.style.display="none"; return; }
+  sec.style.display="";
+  document.getElementById("projGrid").innerHTML=list.map(p=>`
+    <article class="proj">
+      <span class="sku">Claude Project</span>
+      <h3>${esc(p.name)}</h3>
+      <p>${esc(p.desc)}</p>
+      <div class="rolerow">${p.roles.map(r=>`<span class="rtag" style="--rc:${roleColor(r)}">${esc(r)}</span>`).join("")}</div>
+      <a class="open" href="${esc(p.link)}" target="_blank" rel="noopener">Open project →</a>
+    </article>`).join("");
+}
+function renderSkills(){
+  const sec=document.getElementById("skills");
+  // Skills are SEO-only: show when no role filter, or when SEO is selected.
+  const roleOK = !activeRoles.size || activeRoles.has("SEO");
+  const groups = roleOK
+    ? SKILLS.map(g=>({group:g.group, items:g.items.filter(s=> matchQuery(s.cmd+" "+s.desc))})).filter(g=>g.items.length)
+    : [];
+  if(!groups.length){ sec.style.display="none"; return; }
+  sec.style.display="";
+  document.getElementById("skillGroups").innerHTML=groups.map(g=>`
+    <div class="skillgroup">
+      <h4>${esc(g.group)} <span class="n">${g.items.length}</span></h4>
+      <div class="skillgrid">
+        ${g.items.map(s=>`<div class="skill"><code>${esc(s.cmd)}</code><p>${esc(s.desc)}</p></div>`).join("")}
+      </div>
+    </div>`).join("");
+}
+
+/* ============ EVENTS ============ */
+document.getElementById("viewTask").addEventListener("click",()=>setView("task"));
+document.getElementById("viewTool").addEventListener("click",()=>setView("tool"));
+function setView(v){
+  view=v;
+  const t=document.getElementById("viewTask"),o=document.getElementById("viewTool");
+  t.classList.toggle("on",v==="task"); o.classList.toggle("on",v==="tool");
+  t.setAttribute("aria-selected",v==="task"); o.setAttribute("aria-selected",v==="tool");
+  render();
+}
+document.getElementById("search").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();renderAll();});
+
+/* ============ INIT ============ */
+buildChips(); renderAll();
+
+if(SHEET_CSV_URL){
+  fetch(SHEET_CSV_URL).then(r=>r.text()).then(txt=>{
+    const parsed=rowsToData(parseCSV(txt));
+    if(parsed.length){DATA=parsed;renderAll();}
+  }).catch(()=>{/* keep fallback */});
+}
+</script>
+</body>
+</html>
