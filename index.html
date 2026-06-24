@@ -245,16 +245,17 @@
           <li>Add a row, or edit an existing one. Each row is one tool.</li>
           <li>Save. The page picks up changes on the next refresh.</li>
         </ol>
-        <p style="font-weight:600;margin-bottom:8px">Columns (use these exact headers):</p>
-        <div class="schema">tool        Name shown on the card
-category    Grouping label (e.g. "Assistants", "Research", "Decks")
-roles       Comma-separated: Everyone, Account Managers, Copywriters, SEO, PPC
-tasks       Comma-separated task names (these become the headings in "By Task")
-best        One line: what it's genuinely good at
-cases       A few use cases, separated by  |  (pipe)
-free        yes  (leave blank if not free)
-link        URL to open the tool  (optional)</div>
-        <p style="margin-top:16px;font-size:13.5px;color:var(--slate)">PPC team: this is where you add your tools - just fill in rows with the <code>PPC</code> role.</p>
+        <p style="font-weight:600;margin-bottom:8px">Columns (use these exact headers). Most people only ever add a <code>tool</code> row - projects and skills live in the same sheet so everything is in one place:</p>
+        <div class="schema">type         tool, project, or skill   (blank = tool)
+name         Name shown (tool name, project name, or /skill-command)
+category     Tools: a label like "Assistants".  Skills: the group name.
+roles        Comma-separated: Everyone, Account Managers, Copywriters, SEO, PPC
+tasks        Tools only - comma-separated task names (become the headings)
+description  One line: what it does / what it's good at
+cases        Tools only - a few use cases, separated by  |  (pipe)
+free         yes  (tools only; blank if not free)
+link         URL to open it  (tools and projects)</div>
+        <p style="margin-top:16px;font-size:13.5px;color:var(--slate)">PPC team: this is where you add your tools - add rows with <code>type=tool</code> and the <code>PPC</code> role.</p>
       </div>
     </details>
   </div>
@@ -272,7 +273,7 @@ link        URL to open the tool  (optional)</div>
 /* ============ CONFIG ============ */
 // Paste your published Google Sheet CSV URL here (File ▸ Share ▸ Publish to web ▸ CSV).
 // While empty, the page uses the built-in data below.
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkm1SEdY9iRjin13xSjZSwQTNJ9z4jnICUTiWQTwMOF7RwEBu-fdibDwWMMGf9mrE0n5uL52LRPsR9/pub?output=csv";
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmEuaL4sw-KJnGwoDMwApmMICLLYv9wW06KE8FhVQ1swe7dplMGBShYYLJIDUgIiEEESZZm4ar3eCq/pub?output=csv";
 
 /* ============ ROLE SYSTEM ============ */
 const ROLES = [
@@ -371,8 +372,8 @@ const FALLBACK = [
    cases:["Summarize a long video","Ask a question about what a video covers"], free:"yes", link:""},
 ];
 
-/* ============ CLAUDE PROJECTS ============ */
-const PROJECTS = [
+/* ============ CLAUDE PROJECTS (fallback if Sheet unreachable) ============ */
+let PROJECTS = [
   {name:"AI Content Editor", roles:["Copywriters","SEO"], desc:"Edit and tighten content for clarity, flow, and quality.", link:"https://claude.ai/project/019aa2b8-46c0-73e7-a33d-03429ca406ea"},
   {name:"AI Content Formatter", roles:["Copywriters","SEO"], desc:"Reformat a draft into a clean, scannable, on-brand layout.", link:"https://claude.ai/project/019ab723-1b0b-770e-b589-1646cc00d210"},
   {name:"PR Responder", roles:["Account Managers"], desc:"Draft careful, on-brand replies to PR-sensitive situations and reviews.", link:"https://claude.ai/project/019d3f74-667d-7029-bd23-343acb095ddf"},
@@ -380,8 +381,8 @@ const PROJECTS = [
   {name:"Surfer SEO Formatter (Hylan)", roles:["SEO"], desc:"Client-specific (Hylan Dental) - formats content to Surfer SEO guidance.", link:"https://claude.ai/project/019d4036-ea3f-769e-9e01-b5d96b5bea67"},
 ];
 
-/* ============ SEO SKILLS ============ */
-const SKILLS = [
+/* ============ SEO SKILLS (fallback if Sheet unreachable) ============ */
+let SKILLS = [
   {group:"Client Onboarding", items:[
     {cmd:"/market-eval", desc:"Size up a local market before pitching or kicking off - how winnable it is, who's ahead, and how long it'll take."},
     {cmd:"/site-audit", desc:"Full SEO audit (content, conversion, backlinks, competitors) with a prioritized action plan."},
@@ -436,23 +437,37 @@ function parseCSV(text){
   if(val.length||row.length){row.push(val);rows.push(row);}
   return rows;
 }
-function rowsToData(rows){
-  if(!rows.length) return [];
+// Parses the unified master sheet into {tools, projects, skills}.
+// type column routes each row; name/tool and description/best are backward-compatible.
+function parseSheet(rows){
+  const out={tools:[], projects:[], skills:[]};
+  if(!rows.length) return out;
   const head=rows[0].map(h=>h.trim().toLowerCase());
   const idx=k=>head.indexOf(k);
+  const get=(r,k)=> (idx(k)>=0 ? r[idx(k)] : "") || "";
   const split=(s,sep)=> (s||"").split(sep).map(x=>x.trim()).filter(Boolean);
-  return rows.slice(1).filter(r=>r.some(c=>c&&c.trim())).map(r=>({
-    tool:r[idx("tool")]||"",
-    category:r[idx("category")]||"Other",
-    roles:split(r[idx("roles")],","),
-    tasks:split(r[idx("tasks")],","),
-    best:r[idx("best")]||"",
-    use:r[idx("use")]||"",
-    avoid:r[idx("avoid")]||"",
-    cases:split(r[idx("cases")],"|"),
-    free:(r[idx("free")]||"").trim().toLowerCase().startsWith("y")?"yes":"",
-    link:r[idx("link")]||"",
-  })).filter(d=>d.tool);
+  const skillGroups=new Map();
+  rows.slice(1).filter(r=>r.some(c=>c&&c.trim())).forEach(r=>{
+    const type=(get(r,"type")||"tool").trim().toLowerCase();
+    const name=get(r,"name")||get(r,"tool");
+    if(!name) return;
+    const roles=split(get(r,"roles"),",");
+    const desc=get(r,"description")||get(r,"best");
+    const link=get(r,"link");
+    if(type==="project"){
+      out.projects.push({name, roles, desc, link});
+    }else if(type==="skill"){
+      const group=get(r,"category")||"Other";
+      if(!skillGroups.has(group)) skillGroups.set(group,[]);
+      skillGroups.get(group).push({cmd:name, desc});
+    }else{
+      out.tools.push({tool:name, category:get(r,"category")||"Other", roles,
+        tasks:split(get(r,"tasks"),","), best:desc, cases:split(get(r,"cases"),"|"),
+        free:get(r,"free").trim().toLowerCase().startsWith("y")?"yes":"", link});
+    }
+  });
+  out.skills=[...skillGroups.entries()].map(([group,items])=>({group,items}));
+  return out;
 }
 
 /* ============ RENDER HELPERS ============ */
@@ -592,8 +607,11 @@ buildChips(); renderAll();
 
 if(SHEET_CSV_URL){
   fetch(SHEET_CSV_URL).then(r=>r.text()).then(txt=>{
-    const parsed=rowsToData(parseCSV(txt));
-    if(parsed.length){DATA=parsed;renderAll();}
+    const p=parseSheet(parseCSV(txt));
+    if(p.tools.length) DATA=p.tools;
+    if(p.projects.length) PROJECTS=p.projects;
+    if(p.skills.length) SKILLS=p.skills;
+    renderAll();
   }).catch(()=>{/* keep fallback */});
 }
 </script>
